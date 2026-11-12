@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍 求职雷达 Job Radar</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: #2e3250;
+  --text: #e2e8f0;
+  --text2: #8892aa;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --orange: #f97316;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, 'PingFang SC', sans-serif; min-height: 100vh; }
+
+/* ── 顶部导航 ── */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 52px;
+}
+.header h1 { font-size: 16px; font-weight: 700; margin-right: 28px; white-space: nowrap; }
+.nav-tabs { display: flex; gap: 0; height: 100%; }
+.tab-btn {
+  height: 100%;
+  padding: 0 18px;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+/* ── 按钮 ── */
+.btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn:hover { border-color: var(--blue); color: var(--blue); }
+.btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn-primary:hover { background: #2563eb; color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── 主体 ── */
+.main { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+/* ── 统计卡片 ── */
+.stats-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+  min-width: 130px;
+  flex: 1;
+}
+.stat-card .label { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+.stat-card .value { font-size: 28px; font-weight: 700; }
+.stat-card .value.blue { color: var(--blue); }
+.stat-card .value.green { color: var(--green); }
+.stat-card .value.yellow { color: var(--yellow); }
+.stat-card .value.purple { color: var(--purple); }
+.stat-card .value.orange { color: var(--orange); }
+
+/* ── 过滤栏 ── */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-bar input, .filter-bar select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 6px 12px;
+  font-size: 13px;
+  outline: none;
+}
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--blue); }
+.filter-bar input { flex: 1; min-width: 200px; }
+.result-count { margin-left: auto; font-size: 12px; color: var(--text2); }
+
+/* ── 职位卡片 ── */
+.jobs-grid { display: flex; flex-direction: column; gap: 10px; }
+.job-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color .15s;
+  position: relative;
+}
+.job-card:hover { border-color: #3b5bdb; }
+.job-card.expanded { border-color: var(--blue); }
+.job-card.filtered { opacity: .5; }
+
+.job-header { display: flex; align-items: flex-start; gap: 12px; }
+.score-badge {
+  min-width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.score-10 { background: #14532d; color: #4ade80; }
+.score-9  { background: #1e3a5f; color: #60a5fa; }
+.score-8  { background: #3b3010; color: #fbbf24; }
+.score-7  { background: #2d1b5c; color: #c084fc; }
+.score-low { background: #2a1515; color: #f87171; }
+.score-none { background: var(--surface2); color: var(--text2); font-size: 11px; }
+
+.job-meta { flex: 1; min-width: 0; }
+.job-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.job-sub { font-size: 12px; color: var(--text2); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.job-sub span { display: flex; align-items: center; gap: 3px; }
+
+.job-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.tag-country  { background: #1e3a5f; color: #93c5fd; }
+.tag-visa-confirmed  { background: #14532d; color: #4ade80; }
+.tag-visa-unknown    { background: #2a2015; color: #fbbf24; }
+.tag-visa-no_sponsor { background: #3b0f0f; color: #f87171; }
+.tag-must    { background: #14532d; color: #4ade80; }
+.tag-worth   { background: #1e3a5f; color: #60a5fa; }
+.tag-long    { background: #2d1b5c; color: #c084fc; }
+.tag-pushed  { background: #14532d33; color: #4ade80; border: 1px solid #4ade8033; }
+.tag-filtered { background: #3b0f0f; color: #f87171; }
+.tag-source  { background: var(--surface2); color: var(--text2); }
+
+.job-reason { font-size: 12px; color: var(--text2); margin-top: 6px; font-style: italic; }
+
+/* 展开详情 */
+.job-detail {
+  display: none;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.job-card.expanded .job-detail { display: block; }
+
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
+
+.detail-block { background: var(--surface2); border-radius: 8px; padding: 12px 14px; }
+.detail-block h4 { font-size: 11px; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; letter-spacing: .05em; }
+.detail-block p { font-size: 13px; line-height: 1.6; color: var(--text); }
+.detail-block ul { padding-left: 16px; }
+.detail-block li { font-size: 13px; line-height: 1.8; color: var(--text); }
+.detail-block li.pro { color: var(--green); }
+.detail-block li.con { color: var(--red); }
+
+.apply-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 24px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background .15s;
+}
+.apply-btn:hover { background: #2563eb; }
+
+/* ── 来源页 ── */
+.sources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.source-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.source-card .s-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.source-card .s-name { font-size: 14px; font-weight: 600; flex: 1; }
+.source-card .s-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+.type-rss  { background: #1e3a5f; color: #93c5fd; }
+.type-gh   { background: #14532d; color: #4ade80; }
+.type-lv   { background: #2d1b5c; color: #c084fc; }
+.type-api  { background: #3b2010; color: #fb923c; }
+.type-li   { background: #0a2540; color: #60a5fa; }
+.source-card .s-stats { display: flex; gap: 16px; font-size: 12px; color: var(--text2); }
+.source-card .s-stats strong { color: var(--text); }
+.country-flag { font-size: 14px; }
+
+/* ── 国家分布条 ── */
+.country-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.country-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  transition: all .15s;
+}
+.country-pill:hover, .country-pill.active { border-color: var(--blue); color: var(--blue); background: #1e3a5f33; }
+.country-pill .cnt { margin-left: 4px; opacity: .7; }
+
+/* ── 空状态 ── */
+.empty { text-align: center; padding: 60px 0; color: var(--text2); }
+.empty .icon { font-size: 40px; margin-bottom: 12px; }
+
+/* ── Loading ── */
+.loading { text-align: center; padding: 40px; color: var(--text2); }
+.spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Tab panels ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 13px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+.pagination { display: flex; align-items: center; gap: 10px; margin-top: 16px; justify-content: center; }
+.page-info { font-size: 13px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌍 求职雷达</h1>
+  <div class="nav-tabs">
+    <button class="tab-btn" onclick="switchTab('recommended')">⭐ 今日推荐</button>
+    <button class="tab-btn active" onclick="switchTab('today')">📥 今日收集</button>
+    <button class="tab-btn" onclick="switchTab('all')">📂 全部岗位</button>
+    <button class="tab-btn" onclick="switchTab('sources')">🔌 来源管理</button>
+  </div>
+  <div class="header-right">
+    <button class="btn" onclick="triggerCollect(this)">🔄 立即采集</button>
+    <button class="btn" onclick="triggerScore(this)">🤖 立即评分</button>
+    <button class="btn btn-primary" onclick="loadAll()">↻ 刷新</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- 统计卡片 -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="label">总岗位数</div><div class="value blue" id="s-total">—</div></div>
+    <div class="stat-card"><div class="label">今日收集</div><div class="value green" id="s-today">—</div></div>
+    <div class="stat-card"><div class="label">已推送推荐</div><div class="value yellow" id="s-recommended">—</div></div>
+    <div class="stat-card"><div class="label">已评分</div><div class="value purple" id="s-scored">—</div></div>
+    <div class="stat-card"><div class="label">≥7分岗位</div><div class="value orange" id="s-high">—</div></div>
+  </div>
+
+  <!-- 今日推荐 Tab -->
+  <div class="tab-panel" id="panel-recommended">
+    <div class="filter-bar">
+      <input type="text" id="rec-search" placeholder="搜索职位名 / 公司名..." oninput="debounceLoad('recommended')">
+      <select id="rec-country" onchange="loadJobs('recommended')">
+        <option value="">全部国家</option>
+        <option value="US">🇺🇸 US</option>
+        <option value="UK">🇬🇧 UK</option>
+        <option value="CA">🇨🇦 CA</option>
+        <option value="AU">🇦🇺 AU</option>
+        <option value="SG">🇸🇬 SG</option>
+        <option value="JP">🇯🇵 JP</option>
+        <option value="REMOTE">🌐 REMOTE</option>
+      </select>
+      <span class="result-count" id="rec-count"></span>
+    </div>
+    <div id="jobs-recommended" class="jobs-grid"><div class="loading"><span class="spin">⟳</span> 加载中...</div></div>
+  </div>
+
+  <!-- 今日收集 Tab -->
+  <div class="tab-panel active" id="panel-today">
+    <div class="filter-bar">
+      <input type="text" id="tod-search" placeholder="搜索职位名 / 公司名..." oninput="debounceLoad('today')">
+      <select id="tod-country" onchange="loadJobs('today')">
+        <option value="">全部国家</option>
+        <option value="US">🇺🇸 US</option>
+        <option value="UK">🇬🇧 UK</option>
+        <option value="CA">🇨🇦 CA</option>
+        <option value="AU">🇦🇺 AU</option>
+        <option value="SG">🇸🇬 SG</option>
+        <option value="JP">🇯🇵 JP</option>
+        <option value="REMOTE">🌐 REMOTE</option>
+      </select>
+      <select id="tod-score" onchange="loadJobs('today')">
+        <option value="0">全部分数</option>
+        <option value="7">≥7分</option>
+        <option value="8">≥8分</option>
+        <option value="9">≥9分</option>
+      </select>
+      <span class="result-count" id="tod-count"></span>
+    </div>
+    <div id="jobs-today" class="jobs-grid"><div class="loading"><span class="spin">⟳</span> 加载中...</div></div>
+  </div>
+
+  <!-- 全部岗位 Tab -->
+  <div class="tab-panel" id="panel-all">
+    <div class="filter-bar">
+      <input type="text" id="all-search" placeholder="搜索职位名 / 公司名..." oninput="debounceLoad('all')">
+      <select id="all-country" onchange="loadJobs('all')">
+        <option value="">全部国家</option>
+        <option value="US">🇺🇸 US</option>
+        <option value="UK">🇬🇧 UK</option>
+        <option value="CA">🇨🇦 CA</option>
+        <option value="AU">🇦🇺 AU</option>
+        <option value="SG">🇸🇬 SG</option>
+        <option value="JP">🇯🇵 JP</option>
+        <option value="REMOTE">🌐 REMOTE</option>
+      </select>
+      <select id="all-score" onchange="loadJobs('all')">
+        <option value="0">全部分数</option>
+        <option value="7">≥7分</option>
+        <option value="8">≥8分</option>
+        <option value="9">≥9分</option>
+      </select>
+      <span class="result-count" id="all-count"></span>
+    </div>
+    <div id="jobs-all" class="jobs-grid"><div class="loading"><span class="spin">⟳</span> 加载中...</div></div>
+    <div class="pagination" id="all-pagination" style="display:none">
+      <button class="btn" id="all-prev" onclick="changePage('all', -1)">← 上一页</button>
+      <span class="page-info" id="all-page-info"></span>
+      <button class="btn" id="all-next" onclick="changePage('all', 1)">下一页 →</button>
+    </div>
+  </div>
+
+  <!-- 来源管理 Tab -->
+  <div class="tab-panel" id="panel-sources">
+    <div id="sources-container" class="loading"><span class="spin">⟳</span> 加载中...</div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 状态 ──────────────────────────────────────────────
+let currentTab = 'today';
+let pages = { recommended: 0, today: 0, all: 0 };
+let totals = { recommended: 0, today: 0, all: 0 };
+const PAGE_SIZE = 50;
+let debounceTimer = null;
+
+const COUNTRY_FLAGS = { US:'🇺🇸', UK:'🇬🇧', CA:'🇨🇦', AU:'🇦🇺', SG:'🇸🇬', JP:'🇯🇵', REMOTE:'🌐', FR:'🇫🇷' };
+const PRIORITY_LABELS = { must_apply:'🔥 必投', worth_trying:'⭐ 值得尝试', long_shot:'🎯 碰碰运气' };
+const VISA_LABELS = { confirmed:'✅ 签证赞助', unknown:'❓ 签证未知', no_sponsor:'❌ 不赞助' };
+
+// ── 工具函数 ──────────────────────────────────────────
+function scoreClass(s) {
+  if (!s) return 'score-none';
+  if (s >= 10) return 'score-10';
+  if (s >= 9)  return 'score-9';
+  if (s >= 8)  return 'score-8';
+  if (s >= 7)  return 'score-7';
+  return 'score-low';
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 3600) return `${Math.floor(diff/60)}分钟前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}小时前`;
+  return `${Math.floor(diff/86400)}天前`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function debounceLoad(tab) {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => loadJobs(tab), 300);
+}
+
+// ── Tab 切换 ──────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn')[['recommended','today','all','sources'].indexOf(tab)].classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`panel-${tab}`).classList.add('active');
+
+  if (tab === 'sources') loadSources();
+  else loadJobs(tab);
+}
+
+// ── 加载统计 ──────────────────────────────────────────
+async function loadStats() {
+  try {
+    const r = await fetch('/api/stats');
+    const d = await r.json();
+    document.getElementById('s-total').textContent = d.total.toLocaleString();
+    document.getElementById('s-today').textContent = d.today.toLocaleString();
+    document.getElementById('s-recommended').textContent = d.recommended.toLocaleString();
+    document.getElementById('s-scored').textContent = d.scored.toLocaleString();
+    document.getElementById('s-high').textContent = d.high_score.toLocaleString();
+  } catch(e) { console.error(e); }
+}
+
+// ── 加载职位 ──────────────────────────────────────────
+async function loadJobs(tab) {
+  pages[tab] = 0;
+  await fetchJobs(tab);
+}
+
+async function changePage(tab, dir) {
+  const newPage = pages[tab] + dir;
+  const maxPage = Math.ceil(totals[tab] / PAGE_SIZE) - 1;
+  if (newPage < 0 || newPage > maxPage) return;
+  pages[tab] = newPage;
+  await fetchJobs(tab);
+}
+
+async function fetchJobs(tab) {
+  const container = document.getElementById(`jobs-${tab}`);
+  container.innerHTML = '<div class="loading"><span class="spin">⟳</span> 加载中...</div>';
+
+  const search = document.getElementById(`${tab === 'recommended' ? 'rec' : tab === 'today' ? 'tod' : 'all'}-search`)?.value || '';
+  const country = document.getElementById(`${tab === 'recommended' ? 'rec' : tab === 'today' ? 'tod' : 'all'}-country`)?.value || '';
+  const scoreEl = document.getElementById(`${tab === 'today' ? 'tod' : 'all'}-score`);
+  const minScore = scoreEl ? scoreEl.value : 0;
+
+  const params = new URLSearchParams({
+    tab, search, country, min_score: minScore,
+    limit: PAGE_SIZE, offset: pages[tab] * PAGE_SIZE
+  });
+
+  try {
+    const r = await fetch(`/api/jobs?${params}`);
+    const d = await r.json();
+    totals[tab] = d.total;
+
+    const countEl = document.getElementById(`${tab === 'recommended' ? 'rec' : tab === 'today' ? 'tod' : 'all'}-count`);
+    if (countEl) countEl.textContent = `共 ${d.total} 条`;
+
+    if (d.jobs.length === 0) {
+      container.innerHTML = '<div class="empty"><div class="icon">🔍</div><div>暂无职位</div></div>';
+    } else {
+      container.innerHTML = d.jobs.map(renderJob).join('');
+    }
+
+    // 分页控件（只有 all tab 有）
+    if (tab === 'all') {
+      const pag = document.getElementById('all-pagination');
+      const maxPage = Math.ceil(d.total / PAGE_SIZE);
+      if (maxPage > 1) {
+        pag.style.display = 'flex';
+        document.getElementById('all-page-info').textContent = `第 ${pages[tab]+1} / ${maxPage} 页`;
+        document.getElementById('all-prev').disabled = pages[tab] === 0;
+        document.getElementById('all-next').disabled = pages[tab] >= maxPage - 1;
+      } else {
+        pag.style.display = 'none';
+      }
+    }
+  } catch(e) {
+    container.innerHTML = `<div class="empty"><div class="icon">⚠️</div><div>加载失败: ${e.message}</div></div>`;
+  }
+}
+
+// ── 渲染职位卡片 ──────────────────────────────────────
+function renderJob(j) {
+  const score = j.match_score || 0;
+  const scoreText = score > 0 ? score.toFixed(0) : '?';
+  const flag = COUNTRY_FLAGS[j.country] || '🌍';
+
+  const priorityTag = j.priority
+    ? `<span class="tag tag-${j.priority === 'must_apply' ? 'must' : j.priority === 'worth_trying' ? 'worth' : 'long'}">${PRIORITY_LABELS[j.priority] || j.priority}</span>`
+    : '';
+  const visaTag = `<span class="tag tag-visa-${j.visa_status}">${VISA_LABELS[j.visa_status] || j.visa_status}</span>`;
+  const countryTag = `<span class="tag tag-country">${flag} ${j.country}</span>`;
+  const pushedTag = j.is_pushed ? `<span class="tag tag-pushed">✓ 已推送</span>` : '';
+  const filteredTag = j.is_filtered_out ? `<span class="tag tag-filtered">❌ ${j.filter_reason || '已过滤'}</span>` : '';
+  const sourceTag = j.source_name ? `<span class="tag tag-source">${j.source_name}</span>` : '';
+
+  const reason = j.score_reason ? `<div class="job-reason">💬 ${j.score_reason}</div>` : '';
+
+  // 深度分析部分
+  let detailHTML = '';
+  if (j.is_analyzed && j.match_analysis) {
+    const wins = (j.winning_points || []).map(p => `<li class="pro">✓ ${p}</li>`).join('');
+    const risks = (j.risk_points || []).map(p => `<li class="con">✗ ${p}</li>`).join('');
+    detailHTML = `
+      <div class="detail-grid">
+        <div class="detail-block">
+          <h4>📊 匹配分析</h4>
+          <p>${j.match_analysis}</p>
+        </div>
+        <div class="detail-block">
+          <h4>🛂 签证评估</h4>
+          <p>${j.visa_assessment || '暂无评估'}</p>
+        </div>
+        ${wins ? `<div class="detail-block"><h4>✅ 优势</h4><ul>${wins}</ul></div>` : ''}
+        ${risks ? `<div class="detail-block"><h4>⚠️ 风险</h4><ul>${risks}</ul></div>` : ''}
+        ${j.apply_tips ? `<div class="detail-block" style="grid-column:1/-1"><h4>💡 申请建议</h4><p>${j.apply_tips}</p></div>` : ''}
+      </div>
+      <a class="apply-btn" href="${j.url}" target="_blank">🔗 立即申请</a>
+    `;
+  } else {
+    detailHTML = `
+      <div style="display:flex;gap:14px;align-items:center;color:var(--text2);font-size:13px;">
+        <span>${j.is_scored ? `AI评分: ${score}/10` : '尚未评分'}</span>
+        ${j.location ? `<span>📍 ${j.location}</span>` : ''}
+        ${j.salary ? `<span>💰 ${j.salary}</span>` : ''}
+        ${j.collected_at ? `<span>📅 ${timeAgo(j.collected_at)}</span>` : ''}
+      </div>
+      <a class="apply-btn" href="${j.url}" target="_blank" style="margin-top:12px">🔗 查看职位</a>
+    `;
+  }
+
+  return `
+    <div class="job-card ${j.is_filtered_out ? 'filtered' : ''}" onclick="toggleCard(this)">
+      <div class="job-header">
+        <div class="score-badge ${scoreClass(score)}">${scoreText}</div>
+        <div class="job-meta">
+          <div class="job-title">${j.title}</div>
+          <div class="job-sub">
+            <span>🏢 ${j.company || '未知公司'}</span>
+            ${j.location ? `<span>📍 ${j.location}</span>` : ''}
+            ${j.salary ? `<span>💰 ${j.salary}</span>` : ''}
+            <span>🕒 ${timeAgo(j.collected_at)}</span>
+          </div>
+          <div class="job-tags">
+            ${countryTag}${priorityTag}${visaTag}${pushedTag}${filteredTag}${sourceTag}
+          </div>
+          ${reason}
+        </div>
+      </div>
+      <div class="job-detail">${detailHTML}</div>
+    </div>
+  `;
+}
+
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+}
+
+// ── 加载来源 ──────────────────────────────────────────
+async function loadSources() {
+  const container = document.getElementById('sources-container');
+  container.innerHTML = '<div class="loading"><span class="spin">⟳</span> 加载中...</div>';
+  try {
+    const r = await fetch('/api/sources');
+    const sources = await r.json();
+
+    const typeMap = { RSS: 'rss', Greenhouse: 'gh', Lever: 'lv', API: 'api', LinkedIn: 'li' };
+    const html = `
+      <div style="margin-bottom:12px;font-size:13px;color:var(--text2)">共 ${sources.length} 个来源</div>
+      <div class="sources-grid">
+        ${sources.map(s => `
+          <div class="source-card">
+            <div class="s-header">
+              <span class="country-flag">${COUNTRY_FLAGS[s.country] || '🌍'}</span>
+              <span class="s-name">${s.name}</span>
+              <span class="s-type type-${typeMap[s.type] || 'rss'}">${s.type}</span>
+            </div>
+            <div class="s-stats">
+              <span>总计 <strong>${s.total_jobs}</strong> 条</span>
+              <span>有效 <strong>${s.active_jobs}</strong> 条</span>
+              <span>${s.country}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.innerHTML = html;
+    container.className = '';
+  } catch(e) {
+    container.innerHTML = `<div class="empty"><div class="icon">⚠️</div><div>加载失败: ${e.message}</div></div>`;
+  }
+}
+
+// ── 触发操作 ──────────────────────────────────────────
+async function triggerCollect(btn) {
+  btn.disabled = true;
+  btn.textContent = '⟳ 采集中...';
+  try {
+    const r = await fetch('/api/collect', { method: 'POST' });
+    const d = await r.json();
+    showToast(d.message);
+  } catch(e) { showToast('操作失败: ' + e.message); }
+  setTimeout(() => { btn.disabled = false; btn.textContent = '🔄 立即采集'; }, 5000);
+}
+
+async function triggerScore(btn) {
+  btn.disabled = true;
+  btn.textContent = '⟳ 评分中...';
+  try {
+    const r = await fetch('/api/score', { method: 'POST' });
+    const d = await r.json();
+    showToast(d.message);
+  } catch(e) { showToast('操作失败: ' + e.message); }
+  setTimeout(() => { btn.disabled = false; btn.textContent = '🤖 立即评分'; }, 5000);
+}
+
+function loadAll() {
+  loadStats();
+  loadJobs(currentTab);
+}
+
+// ── 初始化 ──────────────────────────────────────────
+loadStats();
+loadJobs('today');
+</script>
+</body>
+</html>

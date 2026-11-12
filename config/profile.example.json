@@ -1,0 +1,30 @@
+{
+  "name": "林知遥（虚构示例）",
+  "location": "上海",
+  "experience_years": 5,
+  "experience": [
+    "B2B 软件实施与客户培训",
+    "Python 自动化和数据分析"
+  ],
+  "skills": [
+    "Python",
+    "客户沟通",
+    "解决方案设计"
+  ],
+  "target_roles": [
+    "Solutions Engineer",
+    "Technical Program Manager",
+    "Implementation Consultant"
+  ],
+  "target_locations": [
+    "新加坡",
+    "日本",
+    "远程"
+  ],
+  "languages": [
+    "中文",
+    "英语"
+  ],
+  "visa_sponsorship_required": true,
+  "minimum_japan_salary_jpy": 8000000
+}

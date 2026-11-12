@@ -1,0 +1,210 @@
+# ── 全球求职来源配置（已验证可访问） ─────────────────────
+# 虚构人物的示例偏好；请按自己的需求修改，勿提交真实个人资料
+# 目标国家：US / UK / CA / AU / SG / JP（仅高薪）
+
+# ── 薪资过滤（日本专项） ──────────────────────────────────
+japan_min_salary_jpy: 8000000
+
+# ── 角色关键词白名单（标题必须匹配至少一个） ──────────────
+role_keywords:
+  - "solutions engineer"
+  - "solutions architect"
+  - "forward deployment"
+  - "field deployment"
+  - "field application engineer"
+  - "technical account manager"
+  - "customer success engineer"
+  - "implementation consultant"
+  - "AI consultant"
+  - "AI transformation"
+  - "technical program manager"
+  - "presales"
+  - "pre-sales"
+  - "AI implementation"
+  - "AI specialist"
+  - "AI advisor"
+  - "enterprise AI"
+  - "AI product manager"
+  - "AI program manager"
+  - "AI project manager"
+  - "generative AI"
+  - "AI platform engineer"
+  - "AI engineer"
+  - "ML platform"
+  - "LLM engineer"
+  - "customer engineer"
+  - "partner engineer"
+  - "developer advocate"
+  - "developer relations"
+  - "technical customer success"
+  - "integration engineer"
+  - "deployment engineer"
+  - "implementation engineer"
+
+# ── 角色关键词黑名单（标题含以下词则排除） ────────────────
+role_blacklist:
+  - "data scientist"
+  - "research scientist"
+  - "ML researcher"
+  - "deep learning researcher"
+  - "computer vision researcher"
+  - "NLP researcher"
+  - "quantitative"
+  - "hardware engineer"
+  - "embedded"
+  - "FPGA"
+  - "civil engineer"
+  - "mechanical engineer"
+  - "electrical engineer"
+  - "marketing manager"
+  - "account executive"
+  - "sales representative"
+  - "SDR"
+  - "BDR"
+  - "recruiter"
+  - " HR "
+  - "finance manager"
+  - "accountant"
+  - "legal"
+  - "attorney"
+  - "DevOps engineer"
+  - "SRE "
+  - "site reliability"
+  - "data engineer"
+  - "backend engineer"
+  - "frontend engineer"
+  - "full stack engineer"
+  - "software engineer"    # 过滤纯开发（AI engineer会单独白名单匹配）
+
+# ── 签证黑名单（明确不赞助） ─────────────────────────────
+visa_blacklist:
+  - "no sponsorship"
+  - "no visa sponsorship"
+  - "sponsorship not available"
+  - "must be authorized to work"
+  - "must be legally authorized"
+  - "legally eligible to work"
+  - "US citizen or permanent resident"
+  - "US citizen only"
+  - "eligible to work in the US without sponsorship"
+  - "no OPT"
+  - "no CPT"
+  - "no H1B"
+  - "no h-1b"
+  - "right to work in the UK" # 单独出现时过滤（明确赞助的JD会另写）
+
+# ── 签证白名单（明确赞助） ───────────────────────────────
+visa_whitelist:
+  - "visa sponsorship"
+  - "visa sponsor"
+  - "will sponsor"
+  - "sponsorship available"
+  - "sponsorship provided"
+  - "open to sponsorship"
+  - "visa support"
+  - "global talent visa"
+  - "tier 2 sponsor"
+  - "skilled worker visa"
+  - "work authorization provided"
+  - "relocation assistance"
+  - "relocation support"
+  - "就労ビザ"
+  - "ビザサポート"
+
+# ── WeWorkRemotely RSS ────────────────────────────────────
+rss_sources:
+  - id: wwr_mgmt
+    country: REMOTE
+    name: "WeWorkRemotely - Management"
+    url: "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss"
+
+  - id: wwr_dev
+    country: REMOTE
+    name: "WeWorkRemotely - Programming"
+    url: "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+
+  - id: wwr_all
+    country: REMOTE
+    name: "WeWorkRemotely - All"
+    url: "https://weworkremotely.com/remote-jobs.rss"
+
+# ── Greenhouse 公开API（已验证可访问） ────────────────────
+greenhouse_companies:
+  - slug: anthropic
+    name: Anthropic
+    country: US
+
+  - slug: databricks
+    name: Databricks
+    country: US
+
+  - slug: figma
+    name: Figma
+    country: US
+
+  - slug: stripe
+    name: Stripe
+    country: US
+
+  - slug: vercel
+    name: Vercel
+    country: US
+
+  - slug: thoughtworks
+    name: ThoughtWorks
+    country: US
+
+  - slug: cloudflare
+    name: Cloudflare
+    country: US
+
+  - slug: elastic
+    name: Elastic (Elasticsearch)
+    country: US
+
+  - slug: okta
+    name: Okta
+    country: US
+
+  - slug: datadog
+    name: Datadog
+    country: US
+
+  - slug: mongodb
+    name: MongoDB
+    country: US
+
+  - slug: newrelic
+    name: New Relic
+    country: US
+
+  - slug: twilio
+    name: Twilio
+    country: US
+
+  - slug: pagerduty
+    name: PagerDuty
+    country: US
+
+  # ── 新增：国际大厂 ──────────────────────────────────────
+  - slug: adyen
+    name: Adyen
+    country: NL
+
+  - slug: n26
+    name: N26
+    country: DE
+
+  - slug: intercom
+    name: Intercom
+    country: IE
+
+# ── Lever 公开API（已验证可访问） ────────────────────────
+lever_companies:
+  - slug: mistral
+    name: Mistral AI
+    country: FR
+
+  - slug: palantir
+    name: Palantir
+    country: US

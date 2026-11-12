@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Solutions Engineer",
+    "company": "示例云科技",
+    "location": "Singapore",
+    "country": "SG",
+    "salary": "SGD 100,000–130,000",
+    "description": "B2B 客户解决方案、Python 集成；签证政策待核实。",
+    "url": "https://example.com/jobs/solutions-engineer",
+    "score": 8.5,
+    "visa_status": "unknown",
+    "priority": "worth_trying"
+  },
+  {
+    "title": "Technical Program Manager",
+    "company": "远山软件（示例）",
+    "location": "Tokyo",
+    "country": "JP",
+    "salary": "JPY 9,000,000",
+    "description": "跨团队交付与客户培训；职位信息均为虚构。",
+    "url": "https://example.com/jobs/program-manager",
+    "score": 8.0,
+    "visa_status": "unknown",
+    "priority": "worth_trying"
+  },
+  {
+    "title": "Implementation Consultant",
+    "company": "蓝桥系统（示例）",
+    "location": "Remote",
+    "country": "REMOTE",
+    "salary": "未公开",
+    "description": "企业软件实施与数据迁移；职位信息均为虚构。",
+    "url": "https://example.com/jobs/implementation-consultant",
+    "score": 7.3,
+    "visa_status": "unknown",
+    "priority": "long_shot"
+  }
+]
