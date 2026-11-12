@@ -659,5 +659,42 @@ function loadAll() {
 loadStats();
 loadJobs('today');
 </script>
+<script>
+(()=>{
+const dict={"刷新":{"en":"Refresh","ja":"更新"},"取消":{"en":"Cancel","ja":"キャンセル"},"保存":{"en":"Save","ja":"保存"},"加载中...":{"en":"Loading...","ja":"読み込み中..."},"全部":{"en":"All","ja":"すべて"},"状态":{"en":"Status","ja":"状態"},"操作":{"en":"Actions","ja":"操作"},"来源":{"en":"Source","ja":"ソース"},"类型":{"en":"Type","ja":"種類"},"地址":{"en":"Address","ja":"アドレス"},"频率":{"en":"Frequency","ja":"頻度"},"已翻译":{"en":"Translated","ja":"翻訳済み"},"中文":{"en":"Chinese","ja":"中国語"},"日本語":{"en":"Japanese","ja":"日本語"},"英语":{"en":"English","ja":"英語"},"今天":{"en":"Today","ja":"今日"},"时段":{"en":"Time slot","ja":"時間帯"},"集群":{"en":"Cluster","ja":"クラスタ"},"时长":{"en":"Duration","ja":"時間"},"最近操作":{"en":"Recent actions","ja":"最近の操作"},"知道了":{"en":"Got it","ja":"了解"},"加载中…":{"en":"Loading…","ja":"読み込み中…"},"🌍 求职雷达 Job Radar":{"en":"🌍 Job Radar","ja":"🌍 求人レーダー"},"🌍 求职雷达":{"en":"🌍 Job Radar","ja":"🌍 求人レーダー"},"⭐ 今日推荐":{"en":"⭐ Today’s Picks","ja":"⭐ 今日のおすすめ"},"📥 今日收集":{"en":"📥 Collected Today","ja":"📥 今日収集"},"📂 全部岗位":{"en":"📂 All Jobs","ja":"📂 すべての求人"},"🔌 来源管理":{"en":"🔌 Sources","ja":"🔌 ソース管理"},"🔄 立即采集":{"en":"🔄 Collect Now","ja":"🔄 今すぐ収集"},"🤖 立即评分":{"en":"🤖 Score Now","ja":"🤖 今すぐ評価"},"↻ 刷新":{"en":"↻ Refresh","ja":"↻ 更新"},"总岗位数":{"en":"Total Jobs","ja":"求人数"},"今日收集":{"en":"Collected Today","ja":"今日収集"},"已推送推荐":{"en":"Recommendations Sent","ja":"送信済みのおすすめ"},"已评分":{"en":"Scored","ja":"評価済み"},"≥7分岗位":{"en":"Jobs ≥7","ja":"7点以上の求人"},"全部国家":{"en":"All Countries","ja":"すべての国"},"全部分数":{"en":"All Scores","ja":"すべての点数"},"≥7分":{"en":"≥7","ja":"7点以上"},"≥8分":{"en":"≥8","ja":"8点以上"},"≥9分":{"en":"≥9","ja":"9点以上"},"← 上一页":{"en":"← Previous","ja":"← 前へ"},"下一页 →":{"en":"Next →","ja":"次へ →"},"申请职位":{"en":"Apply","ja":"応募する"},"查看详情":{"en":"Details","ja":"詳細"},"来源管理":{"en":"Sources","ja":"ソース管理"},"搜索岗位...":{"en":"Search jobs...","ja":"求人を検索..."},"公司":{"en":"Company","ja":"企業"},"职位":{"en":"Role","ja":"職種"},"地区":{"en":"Region","ja":"地域"},"薪资":{"en":"Salary","ja":"給与"},"评分":{"en":"Score","ja":"点数"},"⭐ 值得尝试":{"en":"⭐ Worth Trying","ja":"⭐ 応募候補"},"🔥 必投":{"en":"🔥 Apply Now","ja":"🔥 応募必須"},"🎯 碰碰运气":{"en":"🎯 Long Shot","ja":"🎯 挑戦枠"},"❓ 签证未知":{"en":"❓ Visa Unknown","ja":"❓ ビザ不明"},"✅ 签证赞助":{"en":"✅ Visa Sponsorship","ja":"✅ ビザ支援あり"},"❌ 不赞助":{"en":"❌ No Sponsorship","ja":"❌ ビザ支援なし"},"未公开":{"en":"Not Disclosed","ja":"非公開"},"暂无职位":{"en":"No jobs yet","ja":"求人はまだありません"},"暂无评估":{"en":"No assessment yet","ja":"評価はまだありません"},"匹配分析":{"en":"Match Analysis","ja":"適合度分析"},"📊 匹配分析":{"en":"📊 Match Analysis","ja":"📊 適合度分析"},"🛂 签证评估":{"en":"🛂 Visa Assessment","ja":"🛂 ビザ評価"},"✅ 优势":{"en":"✅ Strengths","ja":"✅ 強み"},"⚠️ 风险":{"en":"⚠️ Risks","ja":"⚠️ リスク"},"💡 申请建议":{"en":"💡 Application Tips","ja":"💡 応募の助言"},"🔗 立即申请":{"en":"🔗 Apply Now","ja":"🔗 今すぐ応募"},"🔗 查看职位":{"en":"🔗 View Job","ja":"🔗 求人を見る"},"尚未评分":{"en":"Not scored","ja":"未評価"},"✓ 已推送":{"en":"✓ Sent","ja":"✓ 送信済み"},"已过滤":{"en":"Filtered","ja":"除外済み"},"未知公司":{"en":"Unknown company","ja":"不明な企業"},"搜索职位名 / 公司名...":{"en":"Search role or company...","ja":"職種・企業を検索..."},"⟳ 采集中...":{"en":"⟳ Collecting...","ja":"⟳ 収集中..."},"⟳ 评分中...":{"en":"⟳ Scoring...","ja":"⟳ 評価中..."}};
+const key='opensource.language';
+let lang=localStorage.getItem(key)||(/^(ja)/i.test(navigator.language)?'ja':/^(en)/i.test(navigator.language)?'en':'zh');
+if(!['zh','en','ja'].includes(lang))lang='zh';
+const originals=new WeakMap(), last=new WeakMap();
+const clean=s=>s.replace(/\s+/g,' ').trim();
+let busy=false;
+function translate(){
+ if(busy)return;busy=true;
+ const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;
+ while((node=walk.nextNode())){
+  if(node.parentElement?.closest('script,style,textarea,pre,code,#language-switch'))continue;
+  const now=node.nodeValue||'';if(!originals.has(node)||now!==last.get(node))originals.set(node,now);
+  const source=originals.get(node), entry=dict[clean(source)];
+  let rendered=entry?entry[lang]:clean(source);
+  if(!entry&&lang!=='zh'){
+    rendered=rendered.replace(/共 (\d+) 条/g,lang==='en'?'$1 jobs':'全 $1 件').replace(/(\d+)分钟前/g,lang==='en'?'$1m ago':'$1分前').replace(/(\d+)小时前/g,lang==='en'?'$1h ago':'$1時間前').replace(/(\d+)天前/g,lang==='en'?'$1d ago':'$1日前').replace(/共 (\d+) 个来源/g,lang==='en'?'$1 sources':'全 $1 ソース').replace(/第 (\d+) \/ (\d+) 页/g,lang==='en'?'Page $1 / $2':'$1 / $2 ページ').replace(/未公开/g,lang==='en'?'Not Disclosed':'非公開');
+  }
+  const wanted=lang==='zh'?source:(source.match(/^\s*/)[0]+rendered+source.match(/\s*$/)[0]);
+  if(now!==wanted)node.nodeValue=wanted;last.set(node,wanted);
+ }
+ document.querySelectorAll('[placeholder]').forEach(el=>{
+  const now=el.getAttribute('placeholder')||'';if(!el.dataset.i18nOriginal||now!==el.dataset.i18nLast)el.dataset.i18nOriginal=now;
+  const source=el.dataset.i18nOriginal, entry=dict[clean(source)];
+  const wanted=lang==='zh'||!entry?source:entry[lang];
+  if(now!==wanted)el.setAttribute('placeholder',wanted);el.dataset.i18nLast=wanted;
+ });
+ document.documentElement.lang=lang==='zh'?'zh-CN':lang;busy=false;
+}
+const select=document.createElement('select');select.id='language-switch';select.setAttribute('aria-label','Language / 语言 / 言語');select.innerHTML='<option value="zh">中文</option><option value="en">English</option><option value="ja">日本語</option>';select.value=lang;
+select.style.cssText='position:fixed;right:16px;bottom:16px;z-index:10000;padding:8px 12px;border-radius:8px;border:1px solid #888;background:#18202c;color:white;font:14px sans-serif;box-shadow:0 3px 15px #0005';
+select.addEventListener('change',()=>{lang=select.value;localStorage.setItem(key,lang);translate()});document.body.appendChild(select);
+new MutationObserver(()=>translate()).observe(document.body,{subtree:true,childList:true,characterData:true});translate();
+})();
+</script>
 </body>
 </html>

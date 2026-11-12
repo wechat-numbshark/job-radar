@@ -1,3 +1,5 @@
+**语言 / Language / 言語:** [简体中文](README.md) · [English](README.en.md) · [日本語](README.ja.md)
+
 # Job Radar / 求职雷达
 
 从公开招聘来源汇总职位，按可配置的岗位、地区、签证与薪资偏好筛选，并可选用 OpenRouter 做匹配分析。网页默认只在本机开放。
@@ -19,3 +21,7 @@
 包含 RSS、Greenhouse、Lever、Remotive、Remote OK、Arbeitnow 和 LinkedIn 访客页面采集器。LinkedIn 默认关闭；只有显式设置 `ENABLE_LINKEDIN=true` 才会使用访客页面采集。该页面结构易变，可能限制抓取；请遵守各站条款和速率限制。模型对签证赞助与薪资的判断只是提示，申请前应查看雇主原始职位页。默认网页绑定 `127.0.0.1`；如要公网使用，先加认证。
 
 MIT License。本项目不隶属于任何招聘平台。
+
+## 语言
+
+网页右下角可切换中文、English、日本語；主导航、筛选和常用状态会随之切换。来自外部系统的标题、原文和诊断详情保留来源语言。
