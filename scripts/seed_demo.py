@@ -12,9 +12,25 @@ async def main():
     rows = json.loads((Path(__file__).resolve().parents[1] / "examples/demo-jobs.json").read_text(encoding="utf-8"))
     async with get_session() as session:
         for row in rows:
-            if await session.get(Job, Job.make_id(row["url"])):
-                continue
-            session.add(Job(id=Job.make_id(row["url"]), title=row["title"], company=row["company"], location=row["location"], country=row["country"], salary=row["salary"], description=row["description"], url=row["url"], source_id="demo", source_name="Fictional demo", match_score=row["score"], visa_status=row["visa_status"], priority=row["priority"], is_scored=True, is_analyzed=True))
+            job = await session.get(Job, Job.make_id(row["url"]))
+            if job is None:
+                job = Job(id=Job.make_id(row["url"]), url=row["url"])
+                session.add(job)
+            job.title = row["title"]
+            job.company = row["company"]
+            job.location = row["location"]
+            job.country = row["country"]
+            job.salary = row["salary"]
+            job.description = row["description"]
+            job.source_id = "demo"
+            job.source_name = "Fictional demo"
+            job.match_score = row["score"]
+            job.score_reason = row["score_reason"]
+            job.analysis_json = json.dumps(row["analysis"], ensure_ascii=False)
+            job.visa_status = row["visa_status"]
+            job.priority = row["priority"]
+            job.is_scored = True
+            job.is_analyzed = True
     await close_db()
 
 if __name__ == "__main__":

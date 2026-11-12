@@ -2,7 +2,23 @@
 
 **Language:** [简体中文](README.md) · English · [日本語](README.ja.md)
 
-![Three fictional jobs in the local dashboard](docs/demo-jobs.png)
+**Spend less time revisiting job boards and more time applying to the right roles.** Bring listings into one view, compare them with your own preferences, and see the match reasons and missing facts—especially visa and salary—before investing time in an application.
+
+### From listing to decision · synthetic candidate and jobs
+
+**Three jobs in one view:**
+
+![Fictional jobs in the dashboard](docs/demo-jobs.png)
+
+**Match, risks, and next step:**
+
+![Fictional match analysis](docs/demo-match.png)
+
+**Configured sources:**
+
+![Source configuration with zero live collection](docs/demo-sources.png)
+
+The sample scores and analysis are hand-written demonstration data, not a live AI result. Source counts are zero because the demo does not contact job platforms.
 
 Aggregate public job listings, filter them using configurable role, region, visa, and salary preferences, and optionally analyze matches with OpenRouter. The site binds to localhost by default.
 

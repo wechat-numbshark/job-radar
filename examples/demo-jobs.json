@@ -9,7 +9,21 @@
     "url": "https://example.com/jobs/solutions-engineer",
     "score": 8.5,
     "visa_status": "unknown",
-    "priority": "worth_trying"
+    "priority": "worth_trying",
+    "score_reason": "虚构演示评分：根据示例档案与职位描述做初筛。",
+    "analysis": {
+      "match_analysis": "B2B 方案沟通与 Python 集成经验与岗位描述有交集；这是演示评分，不代表真实录用概率。",
+      "winning_points": [
+        "具备客户沟通与实施经验",
+        "熟悉 Python 自动化"
+      ],
+      "risk_points": [
+        "雇主是否支持签证尚未核实",
+        "需确认具体产品栈"
+      ],
+      "visa_assessment": "职位样本未提供可信签证信息；必须向雇主核实。",
+      "apply_tips": "先核对雇主官网职位与签证政策，再用真实项目成果写一段针对性的申请说明。"
+    }
   },
   {
     "title": "Technical Program Manager",
@@ -21,7 +35,21 @@
     "url": "https://example.com/jobs/program-manager",
     "score": 8.0,
     "visa_status": "unknown",
-    "priority": "worth_trying"
+    "priority": "worth_trying",
+    "score_reason": "虚构演示评分：根据示例档案与职位描述做初筛。",
+    "analysis": {
+      "match_analysis": "跨团队交付背景与项目经理岗位方向相符；薪资文本高于示例门槛，但仍需核对职级与税前口径。",
+      "winning_points": [
+        "有跨团队交付经验",
+        "目标地区为日本"
+      ],
+      "risk_points": [
+        "日语要求未核实",
+        "签证政策未核实"
+      ],
+      "visa_assessment": "职位样本未提供可信签证信息；必须向雇主核实。",
+      "apply_tips": "先确认日语、签证与岗位级别，再准备交付里程碑案例。"
+    }
   },
   {
     "title": "Implementation Consultant",
@@ -33,6 +61,19 @@
     "url": "https://example.com/jobs/implementation-consultant",
     "score": 7.3,
     "visa_status": "unknown",
-    "priority": "long_shot"
+    "priority": "long_shot",
+    "score_reason": "虚构演示评分：根据示例档案与职位描述做初筛。",
+    "analysis": {
+      "match_analysis": "实施与数据迁移方向相符，但薪资未公开、远程地区限制也未确认。",
+      "winning_points": [
+        "有企业软件实施经验"
+      ],
+      "risk_points": [
+        "薪资未公开",
+        "远程地区与签证限制待核实"
+      ],
+      "visa_assessment": "职位样本未提供可信签证信息；必须向雇主核实。",
+      "apply_tips": "先向雇主确认薪资范围和可工作地区，再决定是否投入申请时间。"
+    }
   }
 ]
