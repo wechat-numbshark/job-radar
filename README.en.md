@@ -4,6 +4,8 @@
 
 **Spend less time revisiting job boards and more time applying to the right roles.** Bring listings into one view, compare them with your own preferences, and see the match reasons and missing facts—especially visa and salary—before investing time in an application.
 
+Need help with installation, a private deployment, or a customization that follows your workflow? Contact us at [buildwithneo.cn](https://buildwithneo.cn).
+
 ### From listing to decision · synthetic candidate and jobs
 
 **Three jobs in one view:**
